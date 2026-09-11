@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparación: Promesas vs Async/Await</title>
+</head>
+<body>
+    <h1>Comparación: Promesas vs Async/Await</h1>
+    <button id="promesas">Cargar con Promesas</button>
+    <button id="async">Cargar con Async/Await</button>
+    <ul id="lista"></ul>
+
+<script>
+const lista = document.getElementById("lista");
+
+// --- Opción 1: Usando Promesas (.then / .catch) ---
+const cargarUsuariosConPromesas = () => {
+    lista.innerHTML = "<li>Cargando con promesas...</li>";
+
+    fetch('https://pokeapi.co/api/v2/pokemon/pikachu')
+    .then(respuesta => {
+        if (!respuesta.ok) throw new Error("Error en la respuesta");
+        return respuesta.json();
+    })
+    .then(data => {
+        mostrarDatos(data, "Con Promesas");
+    })
+    .catch(error => {
+        lista.innerHTML = `<li>Error: ${error.message}</li>`;
+    });
+};
+
+// --- Opción 2: Usando Async/Await ---
+const cargarUsuariosConAsync = async () => {
+    lista.innerHTML = "<li>Cargando con async/await...</li>";
+
+    try {
+        const respuesta = await fetch('https://pokeapi.co/api/v2/pokemon/pikachu');
+        if (!respuesta.ok) throw new Error("Error en la respuesta");
+        const data = await respuesta.json();
+        mostrarDatos(data, "Con Async/Await");
+    } catch (error) {
+        lista.innerHTML = `<li>Error: ${error.message}</li>`;
+    }
+};
+
+// --- Función para mostrar los datos en la lista ---
+const mostrarDatos = (pokemon, metodo) => {
+    lista.innerHTML = `<li><strong>Método: ${metodo}</strong></li>`;
+    
+    // Mostrar nombre del Pokémon
+    const liNombre = document.createElement("li");
+    liNombre.textContent = `Nombre: ${pokemon.name}`;
+    lista.appendChild(liNombre);
+
+    // Mostrar habilidades (ejemplo de iteración correcta)
+    const liHabilidades = document.createElement("li");
+    const habilidades = pokemon.abilities.map(a => a.ability.name).join(", ");
+    liHabilidades.textContent = `Habilidades: ${habilidades}`;
+    lista.appendChild(liHabilidades);
+};
+
+// --- Eventos para cada botón ---
+document.getElementById("promesas").addEventListener("click", cargarUsuariosConPromesas);
+document.getElementById("async").addEventListener("click", cargarUsuariosConAsync);
+</script>
+</body>
+</html>
