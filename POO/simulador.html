@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Simulador de Componentes</title>
+</head>
+<body style="font-family: Arial, sans-serif; padding: 20px;">
+
+<h2>Mi Pantalla Simulada</h2>
+
+<script>
+// 1. Clase Base
+class ComponenteUI {
+    constructor(props) {
+        this.props = props;
+    }
+    render() {
+        return `<div>Componente Genérico</div>`;
+    }
+}
+
+// 2. Subclases (Botón y Tarjeta)
+class Boton extends ComponenteUI {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return `<button style="background-color: ${this.props.color}; padding: 10px; color: white; border: none; border-radius: 5px; margin-right: 5px; cursor: pointer;">
+                    ${this.props.texto}
+                </button>`;
+    }
+}
+
+class TarjetaPerfil extends ComponenteUI {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return `<div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px; margin-bottom: 15px; max-width: 300px;">
+                    <h3 style="margin: 0 0 10px 0;">${this.props.nombre}</h3>
+                    <p style="margin: 0;">Rol: ${this.props.rol}</p>
+                </div>`;
+    }
+}
+
+// 3. Uso de los componentes
+const perfilUsuario = new TarjetaPerfil({ nombre: 'Ana López', rol: 'Desarrolladora Frontend' });
+const botonGuardar = new Boton({ texto: 'Guardar Cambios', color: '#6200EE' });
+const botonCancelar = new Boton({ texto: 'Cancelar', color: '#B00020' });
+
+const componentesEnPantalla = [perfilUsuario, botonGuardar, botonCancelar];
+
+let vistaFinal = "";
+componentesEnPantalla.forEach(componente => {
+    vistaFinal += componente.render();
+});
+
+// Escribe el resultado en la página web
+document.write(vistaFinal);
+</script>
+
+</body>
+</html>
